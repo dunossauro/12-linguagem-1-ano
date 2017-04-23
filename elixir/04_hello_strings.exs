@@ -1,12 +1,14 @@
-
 defmodule Parser do
     def random_word(file) do
         Enum.random(tokenize(file))
     end
     def tokenize(file) do
-        {:atom, string} = File.read(file)
-        Regex.scan(~r/\w+/, string)
+        File.stream!(file, :line)
+        |> Stream.flat_map(&String.split/1)
+        |> Enum.reduce(%{}, fn word, map ->
+            Map.update(map, word, 1, & &1 +1)
+        end)
     end
 end
 
-IO.puts(Parser.tokenize("tabacaria.txt"))
+Enum.each(Parser.tokenize("tabacaria.txt"), fn s -> IO.puts s end)
