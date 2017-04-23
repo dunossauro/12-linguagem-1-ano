@@ -5,15 +5,17 @@ defmodule Game do
     def round(val, tentativas) do
         chute = IO.gets("Digite um número entre 1 e 100: ")
         {chute, _} = Integer.parse(chute)
+        tentativas = tentativas - 1
+        IEx.Helpers.clear()
         cond do
             tentativas == 0 ->
                 "Você perdeu"
             chute > val ->
                 IO.puts("Você errou, seu chute é maior que o valor, você tem #{tentativas} tentativa")
-                round(val, tentativas - 1)
+                round(val, tentativas)
             chute < val ->
                 IO.puts("Você errou, seu chute é menor que o valor, você tem #{tentativas} tentativa")
-                round(val, tentativas - 1)
+                round(val, tentativas)
             chute == val ->
                 "Você ganhou"
         end
@@ -21,4 +23,4 @@ defmodule Game do
 end
 
 val = hd Enum.take_random(1..100, 1)
-IO.puts(Game.round(val, 9))
+IO.puts(Game.round(val, 10))
